@@ -1,5 +1,10 @@
 from app.book import Book
-from app.book_managers import BookViewer, BookPrinter, BookSerializer
+from app.book_managers import (
+    BookConsolePrinter,
+    BookReversePrinter,
+    BookConsoleViewer,
+    BookReverseViewer, BookJsonSerializer, BookXmlSerializer
+)
 from app.method_validators import (
     DisplayMethodValidator,
     PrinterMethodValidator,
@@ -12,27 +17,30 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
         if cmd == "display":
             validator = DisplayMethodValidator()
             validator.validate_method(method_type)
-            viewer = BookViewer(book.title, book.content)
-            if method_type == "console":
-                viewer.display_console()
-            else:
-                viewer.display_reverse()
+            viewer = BookConsoleViewer(book.title, book.content)
+
+            if method_type == "reverse":
+                viewer = BookReverseViewer(book.title, book.content)
+
+            viewer.display()
         elif cmd == "print":
             validator = PrinterMethodValidator()
             validator.validate_method(method_type)
-            printer = BookPrinter(book.title, book.content)
-            if method_type == "console":
-                printer.print_console()
-            else:
-                printer.print_reverse()
+            printer = BookConsolePrinter(book.title, book.content)
+
+            if method_type == "reverse":
+                printer = BookReversePrinter(book.title, book.content)
+
+            printer.print()
         elif cmd == "serialize":
             validator = SerializerMethodValidator()
             validator.validate_method(method_type)
-            serializer = BookSerializer(book.title, book.content)
-            if method_type == "json":
-                return serializer.serialize_to_json()
-            else:
-                return serializer.serialize_to_xml()
+            serializer = BookJsonSerializer(book.title, book.content)
+
+            if method_type == "xml":
+                serializer = BookXmlSerializer(book.title, book.content)
+
+            return serializer.serialize()
 
 
 if __name__ == "__main__":

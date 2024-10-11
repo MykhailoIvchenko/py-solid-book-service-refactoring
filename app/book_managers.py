@@ -1,40 +1,74 @@
 from app.book import Book
 import json
 import xml.etree.ElementTree as Et
+from abc import ABC, abstractmethod
 
 
-class BookPrinter(Book):
+class BookPrinter(ABC):
+    @abstractmethod
+    def print(self) -> None:
+        pass
+
+
+class BookConsolePrinter(Book, BookPrinter):
     def __init__(self, title: str, content: str) -> None:
         super().__init__(title, content)
 
-    def print_console(self) -> None:
+    def print(self) -> None:
         print(f"Printing the book: {self.title}...")
         print(self.content)
 
-    def print_reverse(self) -> None:
+
+class BookReversePrinter(Book, BookPrinter):
+    def __init__(self, title: str, content: str) -> None:
+        super().__init__(title, content)
+
+    def print(self) -> None:
         print(f"Printing the book in reverse: {self.title}...")
         print(self.content[::-1])
 
 
-class BookViewer(Book):
+class BookViewer(ABC):
+    @abstractmethod
+    def display(self) -> None:
+        pass
+
+
+class BookConsoleViewer(Book, BookViewer):
     def __init__(self, title: str, content: str) -> None:
         super().__init__(title, content)
 
-    def display_console(self) -> None:
+    def display(self) -> None:
         print(self.content)
 
-    def display_reverse(self) -> None:
+
+class BookReverseViewer(Book, BookViewer):
+    def __init__(self, title: str, content: str) -> None:
+        super().__init__(title, content)
+
+    def display(self) -> None:
         print(self.content[::-1])
 
 
-class BookSerializer(Book):
+class BookSerializer(ABC):
+    @abstractmethod
+    def serialize(self) -> str:
+        pass
+
+
+class BookJsonSerializer(Book, BookSerializer):
     def __init__(self, title: str, content: str) -> None:
         super().__init__(title, content)
 
-    def serialize_to_json(self) -> str:
+    def serialize(self) -> str:
         return json.dumps({"title": self.title, "content": self.content})
 
-    def serialize_to_xml(self) -> str:
+
+class BookXmlSerializer(Book, BookSerializer):
+    def __init__(self, title: str, content: str) -> None:
+        super().__init__(title, content)
+
+    def serialize(self) -> str:
         root = Et.Element("book")
         title = Et.SubElement(root, "title")
         title.text = self.title
