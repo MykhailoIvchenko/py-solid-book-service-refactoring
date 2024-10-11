@@ -15,8 +15,8 @@ class BookConsolePrinter(Book, BookPrinter):
         super().__init__(title, content)
 
     def print(self) -> None:
-        print(f"Printing the book: {self.title}...")
-        print(self.content)
+        print(f"""Printing the book: {self.title}...
+                {self.content}""")
 
 
 class BookReversePrinter(Book, BookPrinter):
@@ -24,8 +24,8 @@ class BookReversePrinter(Book, BookPrinter):
         super().__init__(title, content)
 
     def print(self) -> None:
-        print(f"Printing the book in reverse: {self.title}...")
-        print(self.content[::-1])
+        print(f"""Printing the book in reverse: {self.title}...
+                {self.content[::-1]}""")
 
 
 class BookViewer(ABC):
